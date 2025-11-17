@@ -6,12 +6,17 @@ def test_factorial(monkeypatch, capsys):
     monkeypatch.setattr('sys.stdin', StringIO("5\n"))
     factorial()
     captured = capsys.readouterr()
-    assert '120' in captured.out, "Expected '120' for input '5' but got something else..."
+    assert '120' == captured.out.strip(), "Expected '120' for input '5' but got something else..."
 
     monkeypatch.setattr('sys.stdin', StringIO("10\n"))
     factorial()
     captured = capsys.readouterr()
-    assert '3628800' in captured.out, "Expected '3628800' for input '10' but got something else..."
+    assert '3628800' == captured.out.strip(), "Expected '3628800' for input '10' but got something else..."
+    
+    monkeypatch.setattr('sys.stdin', StringIO("12\n"))
+    factorial()
+    captured = capsys.readouterr()
+    assert '479001600' == captured.out.strip(), "Expected '3628800' for input '10' but got something else..."
 
 def test_foobar(capsys):
     from foobar import foobar
@@ -39,22 +44,24 @@ def test_grade_calculator(monkeypatch, capsys):
         monkeypatch.setattr('sys.stdin', StringIO(f"{number}\n"))
         grade_calculator()
         captured = capsys.readouterr()
-        assert letter.lower() in captured.out.lower(), f"Expected output '{letter}' for input '{number}' but got something different..."
+        assert letter.lower() == captured.out.strip().lower(), f"Expected output '{letter}' for input '{number}' but got something different..."
 
 def test_leap_year(monkeypatch, capsys):
     from leap_year import leap_year
 
     pairs = {
         '1900': 'regular year',
+        '1904': 'leap year',
+        '1915': 'regular year',
         '1992': 'leap year',
-        '2000': 'leap year'
+        '2000': 'leap year',
     }
 
     for year, status in pairs.items():
         monkeypatch.setattr('sys.stdin', StringIO(f"{year}\n"))
         leap_year()
         captured = capsys.readouterr()
-        assert status.lower() in captured.out.lower(), f"Expected output '{status}' for input '{year}' but got something different..."
+        assert status.lower() == captured.out.strip().lower(), f"Expected output '{status}' for input '{year}' but got something different..."
 
 def test_vowel_counter(monkeypatch, capsys):
     from vowel_counter import vowel_counter
@@ -71,4 +78,4 @@ def test_vowel_counter(monkeypatch, capsys):
         monkeypatch.setattr('sys.stdin', StringIO(f"{word}\n"))
         vowel_counter()
         captured = capsys.readouterr()
-        assert vowel_count in captured.out, f"Expected output '{vowel_count}' for input '{word}' but got something different..."
+        assert vowel_count == captured.out.strip(), f"Expected output '{vowel_count}' for input '{word}' but got something different..."
